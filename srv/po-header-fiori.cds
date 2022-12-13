@@ -12,22 +12,26 @@ annotate pos.POHeaders with @( // header-level annotations
             $Type             : 'UI.DataField',
             Value             : ID,
             Label             : '{i18n>ID}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}                   
         },
         {
             $Type             : 'UI.DataField',
             Value             : grossAmount,
             Label             : '{i18n>grossAmount}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         {
             $Type             : 'UI.DataField',
             Value             : currency_code,
-            ![@UI.Importance] : #Medium
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         {
             $Type : 'UI.DataField',
-            Value : currency.symbol
+            Value : currency.symbol,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         ],
         PresentationVariant : {SortOrder : [

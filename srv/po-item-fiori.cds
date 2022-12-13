@@ -12,25 +12,29 @@ annotate pos.POItems with @( // header-level annotations
             $Type             : 'UI.DataField',
             Value             : product,
             Label             : '{i18n>product}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         {
             $Type             : 'UI.DataField',
             Value             : deliveryDate,
             Label             : '{i18n>deliveryDate}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantity,
             Label             : '{i18n>quantity}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantityUnit,
             Label             : '{i18n>quantityUnit}',
-            ![@UI.Importance] : #High
+            ![@UI.Importance] : #High,
+            ![@HTML5.CssDefaults] : {width : '100%'}  
         }
         ],
         PresentationVariant : {SortOrder : [{
