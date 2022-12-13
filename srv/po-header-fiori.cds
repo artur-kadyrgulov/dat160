@@ -13,7 +13,7 @@ annotate pos.POHeaders with @( // header-level annotations
             Value             : ID,
             Label             : '{i18n>ID}',
             ![@UI.Importance] : #High,
-            ![@HTML5.CssDefaults] : {width : '100%'}                   
+            ![@HTML5.CssDefaults] : {width : '100%'}                                  
         },
         {
             $Type             : 'UI.DataField',
