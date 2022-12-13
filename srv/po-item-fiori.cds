@@ -42,8 +42,8 @@ annotate pos.POItems with @( // header-level annotations
     // Page Header
     UI        : {
         HeaderInfo              : {
-            TypeName       : '{i18n>poService}',
-            TypeNamePlural : '{i18n>poServices}',
+            TypeName       : '{i18n>poItemService}',
+            TypeNamePlural : '{i18n>poItemServices}',
             Title          : {Value : ID},
         },
         HeaderFacets            : [{
