@@ -64,6 +64,7 @@ context teched.PurchaseOrder {
         grossAmount : Decimal(15, 2);
         netAmount   : Decimal(15, 2);
         taxAmount   : Decimal(15, 2);
+        tax         : Integer;
     }
 
     entity Items : cuid {

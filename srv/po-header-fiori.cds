@@ -24,13 +24,27 @@ annotate pos.POHeaders with @( // header-level annotations
         },
         {
             $Type             : 'UI.DataField',
-            Value             : currency_code,
+            Value             : tax,
+            Label             : '{i18n>tax}',
             ![@UI.Importance] : #High,
             ![@HTML5.CssDefaults] : {width : '100%'}  
+        },        
+        {
+            $Type             : 'UI.DataField',
+            Value             : taxAmount,
+            Label             : '{i18n>taxAmount}',
+            ![@HTML5.CssDefaults] : {width : '100%'}
+        },        
+        {
+            $Type             : 'UI.DataField',
+            Value             : netAmount,
+            Label             : '{i18n>netAmount}',
+            ![@HTML5.CssDefaults] : {width : '100%'}             
         },
         {
-            $Type : 'UI.DataField',
-            Value : currency.symbol,
+            $Type             : 'UI.DataField',
+            Value             : currency_code,
+            ![@UI.Importance] : #High,
             ![@HTML5.CssDefaults] : {width : '100%'}  
         },
         ],
@@ -85,22 +99,29 @@ annotate pos.POHeaders with @( // header-level annotations
         },
         {
             $Type : 'UI.DataField',
+            Value : currency_code
+        }, 
+        {
+            $Type : 'UI.DataField',
+            Value : tax,
+            Label : '{i18n>tax}'
+        },                
+        {
+            $Type : 'UI.DataField',
             Value : grossAmount,
             Label : '{i18n>grossAmount}'
         },
         {
             $Type : 'UI.DataField',
             Value : netAmount,
-            Label : '{i18n>netAmount}'
+            Label : '{i18n>netAmount}',
+            ![@Common.FieldControl] : #ReadOnly 
         },
         {
             $Type : 'UI.DataField',            
             Value : taxAmount,
-            Label : '{i18n>taxAmount}'
-        },
-        {
-            $Type : 'UI.DataField',
-            Value : currency_code
+            Label : '{i18n>taxAmount}',
+            ![@Common.FieldControl] : #ReadOnly 
         }
         ]},
         FieldGroup #AdministrativeData : {Data : [
