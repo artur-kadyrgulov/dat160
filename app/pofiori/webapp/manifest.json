@@ -1,0 +1,185 @@
+{
+    "_version": "1.48.0",
+    "sap.app": {
+        "id": "sap.teched.pofiori",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:lrop",
+            "version": "1.8.3",
+            "toolsId": "5393374b-a190-4d6d-8f55-d9e3f9f500b5"
+        },
+        "crossNavigation": {
+            "inbounds": {
+                "POHeaders-display": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "POHeaders",
+                    "action": "display"
+                }
+            }
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/catalog/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [
+                        "annotation"
+                    ],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "4.0"
+                }
+            },
+            "annotation": {
+                "type": "ODataAnnotation",
+                "uri": "annotations/annotation.xml",
+                "settings": {
+                    "localUri": "annotations/annotation.xml"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.108.0",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.ushell": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "sap.teched.pofiori.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            },
+            "@i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "uri": "i18n/i18n.properties"
+            }
+        },
+        "resources": {
+            "css": []
+        },
+        "routing": {
+            "config": {},
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "POHeadersList",
+                    "target": "POHeadersList"
+                },
+                {
+                    "pattern": "POHeaders({key}):?query:",
+                    "name": "POHeadersObjectPage",
+                    "target": "POHeadersObjectPage"
+                },
+                {
+                    "pattern": "POHeaders({key})/item({key2}):?query:",
+                    "name": "POItemsObjectPage",
+                    "target": "POItemsObjectPage"
+                }
+            ],
+            "targets": {
+                "POHeadersList": {
+                    "type": "Component",
+                    "id": "POHeadersList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "POHeaders",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "POHeaders": {
+                                    "detail": {
+                                        "route": "POHeadersObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "POHeadersObjectPage": {
+                    "type": "Component",
+                    "id": "POHeadersObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "editableHeaderContent": false,
+                            "entitySet": "POHeaders",
+                            "navigation": {
+                                "item": {
+                                    "detail": {
+                                        "route": "POItemsObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "POItemsObjectPage": {
+                    "type": "Component",
+                    "id": "POItemsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "editableHeaderContent": false,
+                            "entitySet": "POItems"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sap.fiori": {
+        "registrationIds": [],
+        "archeType": "transactional"
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "dat160.service"
+    }
+}

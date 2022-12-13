@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+        <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="POHeaders" EntityType="CatalogService.POHeaders">
+                    <NavigationPropertyBinding Path="currency" Target="Currencies"/>
+                    <NavigationPropertyBinding Path="item" Target="POItems"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="POHeaders"/>
+                </EntitySet>
+                <EntitySet Name="POItems" EntityType="CatalogService.POItems">
+                    <NavigationPropertyBinding Path="currency" Target="Currencies"/>
+                    <NavigationPropertyBinding Path="poHeader" Target="POHeaders"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="POItems"/>
+                </EntitySet>
+                <EntitySet Name="Currencies" EntityType="CatalogService.Currencies">
+                    <NavigationPropertyBinding Path="texts" Target="Currencies_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="Currencies_texts"/>
+                </EntitySet>
+                <EntitySet Name="Currencies_texts" EntityType="CatalogService.Currencies_texts"/>
+            </EntityContainer>
+            <EntityType Name="POHeaders">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="currency" Type="CatalogService.Currencies">
+                    <ReferentialConstraint Property="currency_code" ReferencedProperty="code"/>
+                </NavigationProperty>
+                <Property Name="currency_code" Type="Edm.String" MaxLength="3"/>
+                <Property Name="grossAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <Property Name="netAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <Property Name="taxAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <NavigationProperty Name="item" Type="Collection(CatalogService.POItems)" Partner="poHeader">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="noteId" Type="Edm.String" MaxLength="10"/>
+                <Property Name="partner" Type="Edm.Guid"/>
+                <Property Name="lifecycleStatus" Type="Edm.String" MaxLength="1" DefaultValue="N"/>
+                <Property Name="approvalStatus" Type="Edm.String" MaxLength="1"/>
+                <Property Name="confirmStatus" Type="Edm.String" MaxLength="1"/>
+                <Property Name="orderingStatus" Type="Edm.String" MaxLength="1"/>
+                <Property Name="invoicingStatus" Type="Edm.String" MaxLength="1"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="CatalogService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="CatalogService.POHeaders"/>
+            </EntityType>
+            <EntityType Name="POItems">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="currency" Type="CatalogService.Currencies">
+                    <ReferentialConstraint Property="currency_code" ReferencedProperty="code"/>
+                </NavigationProperty>
+                <Property Name="currency_code" Type="Edm.String" MaxLength="3"/>
+                <Property Name="grossAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <Property Name="netAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <Property Name="taxAmount" Type="Edm.Decimal" Scale="2" Precision="15"/>
+                <Property Name="quantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+                <Property Name="quantityUnit" Type="Edm.String" MaxLength="3"/>
+                <NavigationProperty Name="poHeader" Type="CatalogService.POHeaders" Partner="item">
+                    <ReferentialConstraint Property="poHeader_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="poHeader_ID" Type="Edm.Guid"/>
+                <Property Name="product" Type="Edm.String" MaxLength="10"/>
+                <Property Name="noteId" Type="Edm.String" MaxLength="10"/>
+                <Property Name="deliveryDate" Type="Edm.DateTimeOffset"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="CatalogService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="CatalogService.POItems"/>
+            </EntityType>
+            <EntityType Name="Currencies">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+                <Property Name="symbol" Type="Edm.String" MaxLength="5"/>
+                <Property Name="numcode" Type="Edm.Int32"/>
+                <Property Name="exponent" Type="Edm.Int32"/>
+                <Property Name="minor" Type="Edm.String"/>
+                <NavigationProperty Name="texts" Type="Collection(CatalogService.Currencies_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="CatalogService.Currencies_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <EntityType Name="Currencies_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+            </EntityType>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CatalogService.POHeaders"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="CatalogService.POHeaders"/>
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CatalogService.POItems"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="CatalogService.POItems"/>
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CatalogService.POHeaders"/>
+                <ReturnType Type="CatalogService.POHeaders"/>
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="CatalogService.POHeaders"/>
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+                <ReturnType Type="CatalogService.POHeaders"/>
+            </Action>
+            <Annotations Target="CatalogService.POHeaders">
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="ID"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="grossAmount"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="currency_code"/>
+                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="currency/symbol"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.PresentationVariant">
+                    <Record Type="UI.PresentationVariantType">
+                        <PropertyValue Property="SortOrder">
+                            <Collection>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Property" PropertyPath="ID"/>
+                                    <PropertyValue Property="Descending" Bool="false"/>
+                                </Record>
+                                <Record Type="Common.SortOrderType">
+                                    <PropertyValue Property="Property" PropertyPath="partner"/>
+                                    <PropertyValue Property="Descending" Bool="false"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="{i18n>poService}"/>
+                            <PropertyValue Property="TypeNamePlural" String="{i18n>poServices}"/>
+                                <PropertyValue Property="Title">
+                                    <Record Type="UI.DataField">
+                                        <PropertyValue Property="Value" Path="ID"/>
+                                    </Record>
+                                </PropertyValue>
+                            </Record>
+                        </Annotation>
+                        <Annotation Term="UI.HeaderFacets">
+                            <Collection>
+                                <Record Type="UI.ReferenceFacet">
+                                    <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Description"/>
+                                    <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                                </Record>
+                                <Record Type="UI.ReferenceFacet">
+                                    <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#AdministrativeData"/>
+                                    <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                                </Record>
+                            </Collection>
+                        </Annotation>
+                        <Annotation Term="UI.FieldGroup" Qualifier="Description">
+                            <Record Type="UI.FieldGroupType">
+                                <PropertyValue Property="Data">
+                                    <Collection>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="ID"/>
+                                        </Record>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </Annotation>
+                        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+                            <Record Type="UI.FieldGroupType">
+                                <PropertyValue Property="Data">
+                                    <Collection>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="partner"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="noteId"/>
+                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="grossAmount"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="netAmount"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="taxAmount"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="currency_code"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="currency/symbol"/>
+                                            <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="currency/name"/>
+                                            <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/ReadOnly"/>
+                                        </Record>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </Annotation>
+                        <Annotation Term="UI.FieldGroup" Qualifier="AdministrativeData">
+                            <Record Type="UI.FieldGroupType">
+                                <PropertyValue Property="Data">
+                                    <Collection>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="createdBy"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="createdAt"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="modifiedBy"/>
+                                        </Record>
+                                        <Record Type="UI.DataField">
+                                            <PropertyValue Property="Value" Path="modifiedAt"/>
+                                        </Record>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </Annotation>
+                        <Annotation Term="UI.Facets">
+                            <Collection>
+                                <Record Type="UI.CollectionFacet">
+                                    <PropertyValue Property="ID" String="PODetails"/>
+                                    <PropertyValue Property="Label" String="{i18n>details}"/>
+                                        <PropertyValue Property="Facets">
+                                            <Collection>
+                                                <Record Type="UI.ReferenceFacet">
+                                                    <PropertyValue Property="Label" String="{i18n>details}"/>
+                                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+                                                    </Record>
+                                                </Collection>
+                                            </PropertyValue>
+                                        </Record>
+                                        <Record Type="UI.ReferenceFacet">
+                                            <PropertyValue Property="Label" String="{i18n>po_items}"/>
+                                                <PropertyValue Property="Target" AnnotationPath="item/@UI.LineItem"/>
+                                            </Record>
+                                        </Collection>
+                                    </Annotation>
+                                    <Annotation Term="Common.Label" String="{i18n>poService}"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.EntityContainer/POHeaders">
+                                        <Annotation Term="UI.PresentationVariant">
+                                            <Record Type="UI.PresentationVariantType">
+                                                <PropertyValue Property="SortOrder">
+                                                    <Collection>
+                                                        <Record Type="Common.SortOrderType">
+                                                            <PropertyValue Property="Property" PropertyPath="ID"/>
+                                                            <PropertyValue Property="Descending" Bool="false"/>
+                                                        </Record>
+                                                        <Record Type="Common.SortOrderType">
+                                                            <PropertyValue Property="Property" PropertyPath="partner"/>
+                                                            <PropertyValue Property="Descending" Bool="false"/>
+                                                        </Record>
+                                                    </Collection>
+                                                </PropertyValue>
+                                            </Record>
+                                        </Annotation>
+                                        <Annotation Term="Common.DraftRoot">
+                                            <Record Type="Common.DraftRootType">
+                                                <PropertyValue Property="ActivationAction" String="CatalogService.draftActivate"/>
+                                                <PropertyValue Property="EditAction" String="CatalogService.draftEdit"/>
+                                                <PropertyValue Property="PreparationAction" String="CatalogService.draftPrepare"/>
+                                            </Record>
+                                        </Annotation>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.POHeaders/createdAt">
+                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                        </Annotations>
+                                        <Annotations Target="CatalogService.POHeaders/createdBy">
+                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                            <Annotation Term="Core.Immutable" Bool="true"/>
+                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                            <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                </Annotations>
+                                                <Annotations Target="CatalogService.POHeaders/modifiedAt">
+                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                    <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                    </Annotations>
+                                                    <Annotations Target="CatalogService.POHeaders/modifiedBy">
+                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                            <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                            </Annotations>
+                                                            <Annotations Target="CatalogService.POHeaders/currency">
+                                                                <Annotation Term="Common.Label" String="{i18n>Currency}"/>
+                                                                    <Annotation Term="Core.Description" String="{i18n>CurrencyCode.Description}"/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="CatalogService.POHeaders/currency_code">
+                                                                        <Annotation Term="Common.Label" String="{i18n>Currency}"/>
+                                                                            <Annotation Term="Common.ValueList">
+                                                                                <Record Type="Common.ValueListType">
+                                                                                    <PropertyValue Property="Label" String="{i18n>Currency}"/>
+                                                                                        <PropertyValue Property="CollectionPath" String="Currencies"/>
+                                                                                        <PropertyValue Property="Parameters">
+                                                                                            <Collection>
+                                                                                                <Record Type="Common.ValueListParameterInOut">
+                                                                                                    <PropertyValue Property="LocalDataProperty" PropertyPath="currency_code"/>
+                                                                                                    <PropertyValue Property="ValueListProperty" String="code"/>
+                                                                                                </Record>
+                                                                                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                                                                                    <PropertyValue Property="ValueListProperty" String="name"/>
+                                                                                                </Record>
+                                                                                            </Collection>
+                                                                                        </PropertyValue>
+                                                                                    </Record>
+                                                                                </Annotation>
+                                                                                <Annotation Term="Core.Description" String="{i18n>CurrencyCode.Description}"/>
+                                                                                </Annotations>
+                                                                                <Annotations Target="CatalogService.POHeaders/grossAmount">
+                                                                                    <Annotation Term="Common.Label" String="{i18n>grossAmount}"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.POHeaders/netAmount">
+                                                                                        <Annotation Term="Common.Label" String="{i18n>netAmount}"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="CatalogService.POHeaders/taxAmount">
+                                                                                            <Annotation Term="Common.Label" String="{i18n>taxAmount}"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/lifecycleStatus">
+                                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="New"/>
+                                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Incomplete"/>
+                                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Approved"/>
+                                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Rejected"/>
+                                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Confirmed"/>
+                                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Saved"/>
+                                                                                                            <PropertyValue Property="Value" String="S"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Delivered"/>
+                                                                                                            <PropertyValue Property="Value" String="D"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Cancelled"/>
+                                                                                                            <PropertyValue Property="Value" String="X"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/approvalStatus">
+                                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="New"/>
+                                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Incomplete"/>
+                                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Approved"/>
+                                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Rejected"/>
+                                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Confirmed"/>
+                                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Saved"/>
+                                                                                                            <PropertyValue Property="Value" String="S"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Delivered"/>
+                                                                                                            <PropertyValue Property="Value" String="D"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Cancelled"/>
+                                                                                                            <PropertyValue Property="Value" String="X"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/confirmStatus">
+                                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="New"/>
+                                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Incomplete"/>
+                                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Approved"/>
+                                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Rejected"/>
+                                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Confirmed"/>
+                                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Saved"/>
+                                                                                                            <PropertyValue Property="Value" String="S"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Delivered"/>
+                                                                                                            <PropertyValue Property="Value" String="D"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Cancelled"/>
+                                                                                                            <PropertyValue Property="Value" String="X"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/orderingStatus">
+                                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="New"/>
+                                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Incomplete"/>
+                                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Approved"/>
+                                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Rejected"/>
+                                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Confirmed"/>
+                                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Saved"/>
+                                                                                                            <PropertyValue Property="Value" String="S"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Delivered"/>
+                                                                                                            <PropertyValue Property="Value" String="D"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Cancelled"/>
+                                                                                                            <PropertyValue Property="Value" String="X"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/invoicingStatus">
+                                                                                                <Annotation Term="Validation.AllowedValues">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="New"/>
+                                                                                                            <PropertyValue Property="Value" String="N"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Incomplete"/>
+                                                                                                            <PropertyValue Property="Value" String="I"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Approved"/>
+                                                                                                            <PropertyValue Property="Value" String="A"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Rejected"/>
+                                                                                                            <PropertyValue Property="Value" String="R"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Confirmed"/>
+                                                                                                            <PropertyValue Property="Value" String="C"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Saved"/>
+                                                                                                            <PropertyValue Property="Value" String="S"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Delivered"/>
+                                                                                                            <PropertyValue Property="Value" String="D"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="Validation.AllowedValue">
+                                                                                                            <Annotation Term="Core.SymbolicName" String="Cancelled"/>
+                                                                                                            <PropertyValue Property="Value" String="X"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/IsActiveEntity">
+                                                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/HasActiveEntity">
+                                                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/HasDraftEntity">
+                                                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POHeaders/DraftAdministrativeData">
+                                                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.POItems">
+                                                                                                <Annotation Term="UI.LineItem">
+                                                                                                    <Collection>
+                                                                                                        <Record Type="UI.DataField">
+                                                                                                            <PropertyValue Property="Value" Path="product"/>
+                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="UI.DataField">
+                                                                                                            <PropertyValue Property="Value" Path="deliveryDate"/>
+                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="UI.DataField">
+                                                                                                            <PropertyValue Property="Value" Path="quantity"/>
+                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                        </Record>
+                                                                                                        <Record Type="UI.DataField">
+                                                                                                            <PropertyValue Property="Value" Path="quantityUnit"/>
+                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                        </Record>
+                                                                                                    </Collection>
+                                                                                                </Annotation>
+                                                                                                <Annotation Term="UI.PresentationVariant">
+                                                                                                    <Record Type="UI.PresentationVariantType">
+                                                                                                        <PropertyValue Property="SortOrder">
+                                                                                                            <Collection>
+                                                                                                                <Record Type="Common.SortOrderType">
+                                                                                                                    <PropertyValue Property="Property" PropertyPath="product"/>
+                                                                                                                    <PropertyValue Property="Descending" Bool="false"/>
+                                                                                                                </Record>
+                                                                                                            </Collection>
+                                                                                                        </PropertyValue>
+                                                                                                    </Record>
+                                                                                                </Annotation>
+                                                                                                <Annotation Term="UI.HeaderInfo">
+                                                                                                    <Record Type="UI.HeaderInfoType">
+                                                                                                        <PropertyValue Property="TypeName" String="{i18n>poService}"/>
+                                                                                                            <PropertyValue Property="TypeNamePlural" String="{i18n>poServices}"/>
+                                                                                                                <PropertyValue Property="Title">
+                                                                                                                    <Record Type="UI.DataField">
+                                                                                                                        <PropertyValue Property="Value" Path="ID"/>
+                                                                                                                    </Record>
+                                                                                                                </PropertyValue>
+                                                                                                            </Record>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.HeaderFacets">
+                                                                                                            <Collection>
+                                                                                                                <Record Type="UI.ReferenceFacet">
+                                                                                                                    <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Description"/>
+                                                                                                                    <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/Medium"/>
+                                                                                                                </Record>
+                                                                                                            </Collection>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.FieldGroup" Qualifier="Description">
+                                                                                                            <Record Type="UI.FieldGroupType">
+                                                                                                                <PropertyValue Property="Data">
+                                                                                                                    <Collection>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="ID"/>
+                                                                                                                        </Record>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="product"/>
+                                                                                                                        </Record>
+                                                                                                                    </Collection>
+                                                                                                                </PropertyValue>
+                                                                                                            </Record>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.FieldGroup" Qualifier="Details">
+                                                                                                            <Record Type="UI.FieldGroupType">
+                                                                                                                <PropertyValue Property="Data">
+                                                                                                                    <Collection>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="product"/>
+                                                                                                                        </Record>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="deliveryDate"/>
+                                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                                        </Record>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="quantity"/>
+                                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                                        </Record>
+                                                                                                                        <Record Type="UI.DataField">
+                                                                                                                            <PropertyValue Property="Value" Path="quantityUnit"/>
+                                                                                                                            <Annotation Term="UI.Importance" EnumMember="UI.ImportanceType/High"/>
+                                                                                                                        </Record>
+                                                                                                                    </Collection>
+                                                                                                                </PropertyValue>
+                                                                                                            </Record>
+                                                                                                        </Annotation>
+                                                                                                        <Annotation Term="UI.Facets">
+                                                                                                            <Collection>
+                                                                                                                <Record Type="UI.CollectionFacet">
+                                                                                                                    <PropertyValue Property="ID" String="POItemsDetails"/>
+                                                                                                                    <PropertyValue Property="Label" String="{i18n>details}"/>
+                                                                                                                        <PropertyValue Property="Facets">
+                                                                                                                            <Collection>
+                                                                                                                                <Record Type="UI.ReferenceFacet">
+                                                                                                                                    <PropertyValue Property="Label" String="{i18n>details}"/>
+                                                                                                                                        <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#Details"/>
+                                                                                                                                    </Record>
+                                                                                                                                </Collection>
+                                                                                                                            </PropertyValue>
+                                                                                                                        </Record>
+                                                                                                                    </Collection>
+                                                                                                                </Annotation>
+                                                                                                                <Annotation Term="Common.Label" String="{i18n>poService}"/>
+                                                                                                                </Annotations>
+                                                                                                                <Annotations Target="CatalogService.EntityContainer/POItems">
+                                                                                                                    <Annotation Term="UI.PresentationVariant">
+                                                                                                                        <Record Type="UI.PresentationVariantType">
+                                                                                                                            <PropertyValue Property="SortOrder">
+                                                                                                                                <Collection>
+                                                                                                                                    <Record Type="Common.SortOrderType">
+                                                                                                                                        <PropertyValue Property="Property" PropertyPath="product"/>
+                                                                                                                                        <PropertyValue Property="Descending" Bool="false"/>
+                                                                                                                                    </Record>
+                                                                                                                                </Collection>
+                                                                                                                            </PropertyValue>
+                                                                                                                        </Record>
+                                                                                                                    </Annotation>
+                                                                                                                    <Annotation Term="Common.DraftNode">
+                                                                                                                        <Record Type="Common.DraftNodeType">
+                                                                                                                            <PropertyValue Property="PreparationAction" String="CatalogService.draftPrepare"/>
+                                                                                                                        </Record>
+                                                                                                                    </Annotation>
+                                                                                                                </Annotations>
+                                                                                                                <Annotations Target="CatalogService.POItems/currency">
+                                                                                                                    <Annotation Term="Common.Label" String="{i18n>Currency}"/>
+                                                                                                                        <Annotation Term="Core.Description" String="{i18n>CurrencyCode.Description}"/>
+                                                                                                                        </Annotations>
+                                                                                                                        <Annotations Target="CatalogService.POItems/currency_code">
+                                                                                                                            <Annotation Term="Common.Label" String="{i18n>Currency}"/>
+                                                                                                                                <Annotation Term="Common.ValueList">
+                                                                                                                                    <Record Type="Common.ValueListType">
+                                                                                                                                        <PropertyValue Property="Label" String="{i18n>Currency}"/>
+                                                                                                                                            <PropertyValue Property="CollectionPath" String="Currencies"/>
+                                                                                                                                            <PropertyValue Property="Parameters">
+                                                                                                                                                <Collection>
+                                                                                                                                                    <Record Type="Common.ValueListParameterInOut">
+                                                                                                                                                        <PropertyValue Property="LocalDataProperty" PropertyPath="currency_code"/>
+                                                                                                                                                        <PropertyValue Property="ValueListProperty" String="code"/>
+                                                                                                                                                    </Record>
+                                                                                                                                                    <Record Type="Common.ValueListParameterDisplayOnly">
+                                                                                                                                                        <PropertyValue Property="ValueListProperty" String="name"/>
+                                                                                                                                                    </Record>
+                                                                                                                                                </Collection>
+                                                                                                                                            </PropertyValue>
+                                                                                                                                        </Record>
+                                                                                                                                    </Annotation>
+                                                                                                                                    <Annotation Term="Core.Description" String="{i18n>CurrencyCode.Description}"/>
+                                                                                                                                    </Annotations>
+                                                                                                                                    <Annotations Target="CatalogService.POItems/grossAmount">
+                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>grossAmount}"/>
+                                                                                                                                        </Annotations>
+                                                                                                                                        <Annotations Target="CatalogService.POItems/netAmount">
+                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>netAmount}"/>
+                                                                                                                                            </Annotations>
+                                                                                                                                            <Annotations Target="CatalogService.POItems/taxAmount">
+                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>taxAmount}"/>
+                                                                                                                                                </Annotations>
+                                                                                                                                                <Annotations Target="CatalogService.POItems/quantity">
+                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>quantity}"/>
+                                                                                                                                                    </Annotations>
+                                                                                                                                                    <Annotations Target="CatalogService.POItems/quantityUnit">
+                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>quantityUnit}"/>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.POItems/IsActiveEntity">
+                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.POItems/HasActiveEntity">
+                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.POItems/HasDraftEntity">
+                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.POItems/DraftAdministrativeData">
+                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.Currencies">
+                                                                                                                                                            <Annotation Term="UI.Identification">
+                                                                                                                                                                <Collection>
+                                                                                                                                                                    <Record Type="UI.DataField">
+                                                                                                                                                                        <PropertyValue Property="Value" Path="name"/>
+                                                                                                                                                                    </Record>
+                                                                                                                                                                </Collection>
+                                                                                                                                                            </Annotation>
+                                                                                                                                                        </Annotations>
+                                                                                                                                                        <Annotations Target="CatalogService.Currencies/name">
+                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>Name}"/>
+                                                                                                                                                            </Annotations>
+                                                                                                                                                            <Annotations Target="CatalogService.Currencies/descr">
+                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                                                                                                                </Annotations>
+                                                                                                                                                                <Annotations Target="CatalogService.Currencies/code">
+                                                                                                                                                                    <Annotation Term="Common.Text" Path="name"/>
+                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>CurrencyCode}"/>
+                                                                                                                                                                    </Annotations>
+                                                                                                                                                                    <Annotations Target="CatalogService.Currencies/symbol">
+                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>CurrencySymbol}"/>
+                                                                                                                                                                        </Annotations>
+                                                                                                                                                                        <Annotations Target="CatalogService.DraftAdministrativeData">
+                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
+                                                                                                                                                                            </Annotations>
+                                                                                                                                                                            <Annotations Target="CatalogService.DraftAdministrativeData/DraftUUID">
+                                                                                                                                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}"/>
+                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                <Annotations Target="CatalogService.DraftAdministrativeData/CreationDateTime">
+                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}"/>
+                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                    <Annotations Target="CatalogService.DraftAdministrativeData/CreatedByUser">
+                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}"/>
+                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                        <Annotations Target="CatalogService.DraftAdministrativeData/DraftIsCreatedByMe">
+                                                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}"/>
+                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                            <Annotations Target="CatalogService.DraftAdministrativeData/LastChangeDateTime">
+                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}"/>
+                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                <Annotations Target="CatalogService.DraftAdministrativeData/LastChangedByUser">
+                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}"/>
+                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                    <Annotations Target="CatalogService.DraftAdministrativeData/InProcessByUser">
+                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}"/>
+                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                        <Annotations Target="CatalogService.DraftAdministrativeData/DraftIsProcessedByMe">
+                                                                                                                                                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
+                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                            <Annotations Target="CatalogService.Currencies_texts/locale">
+                                                                                                                                                                                                                <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+                                                                                                                                                                                                                </Annotations>
+                                                                                                                                                                                                                <Annotations Target="CatalogService.Currencies_texts/name">
+                                                                                                                                                                                                                    <Annotation Term="Common.Label" String="{i18n>Name}"/>
+                                                                                                                                                                                                                    </Annotations>
+                                                                                                                                                                                                                    <Annotations Target="CatalogService.Currencies_texts/descr">
+                                                                                                                                                                                                                        <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                                                                                                                                                                        </Annotations>
+                                                                                                                                                                                                                        <Annotations Target="CatalogService.Currencies_texts/code">
+                                                                                                                                                                                                                            <Annotation Term="Common.Text" Path="name"/>
+                                                                                                                                                                                                                            <Annotation Term="Common.Label" String="{i18n>CurrencyCode}"/>
+                                                                                                                                                                                                                            </Annotations>
+                                                                                                                                                                                                                        </Schema>
+                                                                                                                                                                                                                    </edmx:DataServices>
+                                                                                                                                                                                                                </edmx:Edmx>

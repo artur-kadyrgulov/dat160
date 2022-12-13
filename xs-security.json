@@ -1,0 +1,31 @@
+{
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.POViewer",
+      "description": "POViewer"
+    },
+    {
+      "name": "$XSAPPNAME.POManager",
+      "description": "POManager"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "POViewer",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.POViewer"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "POManager",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.POManager"
+      ],
+      "attribute-references": []
+    }
+  ]
+}
