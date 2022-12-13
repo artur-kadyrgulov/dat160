@@ -11,21 +11,25 @@ annotate pos.POItems with @( // header-level annotations
         {
             $Type             : 'UI.DataField',
             Value             : product,
+            Label             : '{i18n>product}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : deliveryDate,
+            Label             : '{i18n>deliveryDate}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantity,
+            Label             : '{i18n>quantity}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantityUnit,
+            Label             : '{i18n>quantityUnit}',
             ![@UI.Importance] : #High
         }
         ],
@@ -53,31 +57,37 @@ annotate pos.POItems with @( // header-level annotations
         FieldGroup #Description : {Data : [
         {
             $Type : 'UI.DataField',
-            Value : ID
+            Value : ID,
+            Label : '{i18n>ID}'
         },
         {
             $Type : 'UI.DataField',
-            Value : product
+            Value : product,
+            Label : '{i18n>product}'
         }
         ]},
         FieldGroup #Details     : {Data : [
         {
             $Type : 'UI.DataField',
-            Value : product
+            Value : product,
+            Label : '{i18n>product}'
         },
         {
             $Type             : 'UI.DataField',
             Value             : deliveryDate,
+            Label             : '{i18n>deliveryDate}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantity,
+            Label             : '{i18n>quantity}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : quantityUnit,
+            Label             : '{i18n>quantityUnit}',
             ![@UI.Importance] : #High
         }
         ]}

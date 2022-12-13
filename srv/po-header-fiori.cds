@@ -11,11 +11,13 @@ annotate pos.POHeaders with @( // header-level annotations
         {
             $Type             : 'UI.DataField',
             Value             : ID,
+            Label             : '{i18n>ID}',
             ![@UI.Importance] : #High
         },
         {
             $Type             : 'UI.DataField',
             Value             : grossAmount,
+            Label             : '{i18n>grossAmount}',
             ![@UI.Importance] : #High
         },
         {
@@ -31,7 +33,7 @@ annotate pos.POHeaders with @( // header-level annotations
         PresentationVariant : {SortOrder : [
         {
             $Type      : 'Common.SortOrderType',
-            Property   : ID,
+            Property   : ID,            
             Descending : false
         },
         {
@@ -67,30 +69,36 @@ annotate pos.POHeaders with @( // header-level annotations
         FieldGroup #Description        : {Data : [
         {
             $Type : 'UI.DataField',
-            Value : ID
+            Value : ID,
+            Label : '{i18n>ID}'
         }
         ]},
         FieldGroup #Details            : {Data : [
         {
             $Type : 'UI.DataField',
-            Value : partner
+            Value : partner,
+            Label : '{i18n>partner}'
         },
         {
             $Type             : 'UI.DataField',
             Value             : noteId,
+            Label             : '{i18n>noteId}',
             ![@UI.Importance] : #Medium
         },
         {
             $Type : 'UI.DataField',
-            Value : grossAmount
+            Value : grossAmount,
+            Label : '{i18n>grossAmount}'
         },
         {
             $Type : 'UI.DataField',
-            Value : netAmount
+            Value : netAmount,
+            Label : '{i18n>netAmount}'
         },
         {
-            $Type : 'UI.DataField',
-            Value : taxAmount
+            $Type : 'UI.DataField',            
+            Value : taxAmount,
+            Label : '{i18n>taxAmount}'
         },
         {
             $Type : 'UI.DataField',
