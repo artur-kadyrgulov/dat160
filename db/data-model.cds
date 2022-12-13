@@ -55,23 +55,21 @@ context teched.common {
 }
 
 context teched.PurchaseOrder {
-    entity Headers : managed, cuid, teched.common.Amount {
+    entity Headers : managed, cuid {
         @cascade : {all}
         item            : Composition of many Items
                               on item.poHeader = $self;
-        noteId          : teched.common.BusinessKey null;
         partner         : UUID;
-        lifecycleStatus : teched.common.StatusT default 'N';
-        approvalStatus  : teched.common.StatusT;
-        confirmStatus   : teched.common.StatusT;
-        orderingStatus  : teched.common.StatusT;
-        invoicingStatus : teched.common.StatusT;
+        currency    : Currency;
+        grossAmount : Decimal(15, 2);
+        netAmount   : Decimal(15, 2);
+        taxAmount   : Decimal(15, 2);
     }
 
-    entity Items : cuid, teched.common.Amount, teched.common.Quantity {
+    entity Items : cuid {
         poHeader     : Association to Headers;
-        product      : teched.common.BusinessKey;
-        noteId       : teched.common.BusinessKey null;
-        deliveryDate : teched.common.SDate;
-    }
+        product      : String(20);
+        deliveryDate : DateTime;
+        quantity     : Integer;
+    }    
 }

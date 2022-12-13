@@ -28,13 +28,6 @@ annotate pos.POItems with @( // header-level annotations
             Label             : '{i18n>quantity}',
             ![@UI.Importance] : #High,
             ![@HTML5.CssDefaults] : {width : '100%'}  
-        },
-        {
-            $Type             : 'UI.DataField',
-            Value             : quantityUnit,
-            Label             : '{i18n>quantityUnit}',
-            ![@UI.Importance] : #High,
-            ![@HTML5.CssDefaults] : {width : '100%'}  
         }
         ],
         PresentationVariant : {SortOrder : [{
@@ -86,12 +79,6 @@ annotate pos.POItems with @( // header-level annotations
             $Type             : 'UI.DataField',
             Value             : quantity,
             Label             : '{i18n>quantity}',
-            ![@UI.Importance] : #High
-        },
-        {
-            $Type             : 'UI.DataField',
-            Value             : quantityUnit,
-            Label             : '{i18n>quantityUnit}',
             ![@UI.Importance] : #High
         }
         ]}

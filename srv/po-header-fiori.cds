@@ -84,12 +84,6 @@ annotate pos.POHeaders with @( // header-level annotations
             Label : '{i18n>partner}'
         },
         {
-            $Type             : 'UI.DataField',
-            Value             : noteId,
-            Label             : '{i18n>noteId}',
-            ![@UI.Importance] : #Medium
-        },
-        {
             $Type : 'UI.DataField',
             Value : grossAmount,
             Label : '{i18n>grossAmount}'
@@ -107,17 +101,7 @@ annotate pos.POHeaders with @( // header-level annotations
         {
             $Type : 'UI.DataField',
             Value : currency_code
-        },
-        {
-            $Type                   : 'UI.DataField',
-            Value                   : currency.symbol,
-            ![@Common.FieldControl] : #ReadOnly
-        },
-        {
-            $Type                   : 'UI.DataField',
-            Value                   : currency.name,
-            ![@Common.FieldControl] : #ReadOnly
-        },
+        }
         ]},
         FieldGroup #AdministrativeData : {Data : [
         {
