@@ -3,7 +3,7 @@ using teched.PurchaseOrder as PO from '../db/data-model';
 service CatalogService {
 
     entity Partner @(
-        title               : '{i18n>poPartnerService}',
+        title               : '{i18n>poService}',
         restrict : [
             {
                 grant : [ 'READ' ],

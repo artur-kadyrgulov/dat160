@@ -39,6 +39,9 @@ annotate pos.Partner with @( // header-level annotations
             TypeNamePlural : '{i18n>poPartnerServices}',
             Title          : {Value : ID},
         },
+        SelectionFields  : [
+            name
+        ],
         HeaderFacets            : [{
             $Type             : 'UI.ReferenceFacet',
             Target            : '@UI.FieldGroup#Description',

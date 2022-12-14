@@ -99,7 +99,8 @@ annotate pos.POHeaders with @( // header-level annotations
         },
         {
             $Type : 'UI.DataField',
-            Value : currency_code
+            Value : currency_code,
+            Label : '{i18n>currency_code}'            
         }, 
         {
             $Type : 'UI.DataField',

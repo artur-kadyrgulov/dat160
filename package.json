@@ -1,75 +1,75 @@
 {
-  "name": "dat160",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^6",
-    "@sap/xssec": "^3",
-    "express": "^4",
-    "hdb": "^0.19.0",
-    "passport": "^0"
-  },
-  "devDependencies": {
-    "@sap/ux-specification": "^1.102.14",
-    "rimraf": "^3.0.2",
-    "sqlite3": "^5.0.4"
-  },
-  "engines": {
-    "node": "^16"
-  },
-  "scripts": {
-    "start": "cds run",
-    "watch-pofiori": "cds watch --open pofiori/webapp/index.html?sap-ui-xx-viewCache=false",
-    "undeploy": "cf undeploy dat160 --delete-services --delete-service-keys --delete-service-brokers",
-    "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-partner": "cds watch --open partner/webapp/index.html?sap-ui-xx-viewCache=false"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "dat160",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^6",
+        "@sap/xssec": "^3",
+        "express": "^4",
+        "hdb": "^0.19.0",
+        "passport": "^0"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "devDependencies": {
+        "@sap/ux-specification": "^1.102.14",
+        "rimraf": "^3.0.2",
+        "sqlite3": "^5.0.4"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "sapux": [
-    "app/pofiori",
-    "app/partner"
-  ],
-  "cds": {
-    "requires": {
-      "[production]": {
-        "db": {
-          "kind": "hana-cloud"
+    "engines": {
+        "node": "^16"
+    },
+    "scripts": {
+        "start": "cds run",
+        "watch-pofiori": "cds watch --open pofiori/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy dat160 --delete-services --delete-service-keys --delete-service-brokers",
+        "build": "rimraf resources mta_archives && mbt build --mtar archive",
+        "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+        "watch-partner": "cds watch --open partner/webapp/index.html?sap-ui-xx-viewCache=false"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        "auth": {
-          "kind": "xsuaa"
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      },
-      "db": {
-        "kind": "sql"
-      }
+    },
+    "sapux": [
+        "app/pofiori",
+        "app/partner"
+    ],
+    "cds": {
+        "requires": {
+            "[production]": {
+                "db": {
+                    "kind": "hana-cloud"
+                },
+                "auth": {
+                    "kind": "xsuaa"
+                }
+            },
+            "db": {
+                "kind": "sql"
+            }
+        }
     }
-  }
 }

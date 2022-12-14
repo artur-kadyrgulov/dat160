@@ -75,9 +75,23 @@ modules:
       - saptechedpofiori.zip
       name: saptechedpofiori
       target-path: resources/
+    - artifacts:
+      - partner.zip
+      name: partner
+      target-path: resources/
 - name: saptechedpofiori
   type: html5
   path: app/pofiori
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: partner
+  type: html5
+  path: app/partner
   build-parameters:
     build-result: dist
     builder: custom
