@@ -56,7 +56,7 @@ annotate pos.POHeaders with @( // header-level annotations
         },
         {
             $Type      : 'Common.SortOrderType',
-            Property   : partner,
+            Property   : partner_ID,
             Descending : false
         }
         ]}
@@ -94,7 +94,7 @@ annotate pos.POHeaders with @( // header-level annotations
         FieldGroup #Details            : {Data : [
         {
             $Type : 'UI.DataField',
-            Value : partner,
+            Value : partner_ID,
             Label : '{i18n>partner}'
         },
         {

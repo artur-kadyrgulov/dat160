@@ -55,12 +55,17 @@ context teched.common {
 }
 
 context teched.PurchaseOrder {
+    entity Partner : managed, cuid {
+        name : String(20);
+        city : String(20);
+        country : Association to sap.common.Countries;
+    }
+
     entity Headers : managed, cuid {
         @cascade : {all}
-        item            : Composition of many Items
-                              on item.poHeader = $self;
-        partner         : UUID;
-        currency    : Currency;
+        item        : Composition of many Items on item.poHeader = $self;
+        partner     : Association to Partner;
+        currency    : Association to sap.common.Currencies;
         grossAmount : Decimal(15, 2);
         netAmount   : Decimal(15, 2);
         taxAmount   : Decimal(15, 2);

@@ -5,7 +5,7 @@ module.exports = cds.service.impl(function () {
 
     this.before ('SAVE', 'POHeaders', async (req) => {
         const { partner, currency_code, grossAmount, tax } = req.data;
-        if (partner == null) throw req.reject (400, 'Enter a partner.')
+        if (partner_ID == null) throw req.reject (400, 'Enter a partner.')
         if (currency_code == null) throw req.reject (400, 'Enter a currency.')
         if (grossAmount == null) throw req.reject (400, 'Enter a grossAmount.')
         if (tax == null) throw req.reject (400, 'Enter a tax.')   
